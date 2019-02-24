@@ -42,14 +42,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let region = CLBeaconRegion(proximityUUID: beaconUuid, major: beaconMajor, minor: beaconMinor, identifier : beaconIdentifier)
         region.notifyOnEntry = true
         region.notifyOnExit = true
-        region.notifyEntryStateOnDisplay = true
         locationManager.startMonitoring(for: region)
     }
 
     
     func displayNotification(message: String) {
         let content = UNMutableNotificationContent()
-        content.title = "iBeacon Notification"
         content.body = message
         let uuidString = UUID().uuidString
         let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: nil)
@@ -76,12 +74,12 @@ extension AppDelegate : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         os_log("iBeacon didEnterRegion.", type: .info)
-        displayNotification(message: "enter")
+        displayNotification(message: "iBeacon detected")
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         os_log("iBeacon didExitRegion.", type: .info)
-        displayNotification(message: "exit")
+        displayNotification(message: "iBeacon lost")
     }
     
 }

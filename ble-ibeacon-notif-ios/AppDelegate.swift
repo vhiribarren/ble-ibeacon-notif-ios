@@ -20,7 +20,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let notificationCenter = UNUserNotificationCenter.current()
     let locationManager = CLLocationManager()
 
-
+    let beaconUuid = UUID(uuidString: "00112233-4455-6677-8899-aabbccddeeff")!
+    let beaconMajor:CLBeaconMajorValue = 0
+    let beaconMinor:CLBeaconMajorValue = 0
+    let beaconIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String
+        ?? "ble-ibeacon-notif-ios"
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         notificationCenter.delegate = self
@@ -32,16 +38,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func detectBeacon() {
         os_log("Start beacon detection.", type: .info)
-        let uuid = UUID(uuidString: "00112233-4455-6677-8899-aabbccddeeff")
-        let major:CLBeaconMajorValue = 0
-        let minor:CLBeaconMinorValue = 0
-        let identifier = UUID().uuidString
-        let region = CLBeaconRegion(proximityUUID: uuid!, major: major, minor: minor, identifier: identifier)
+        // If identifier vary, several monitoring start are done without canceling the previous one
+        let region = CLBeaconRegion(proximityUUID: beaconUuid, major: beaconMajor, minor: beaconMinor, identifier : beaconIdentifier)
         region.notifyOnEntry = true
         region.notifyOnExit = true
         region.notifyEntryStateOnDisplay = true
         locationManager.startMonitoring(for: region)
-        //locationManager.startRangingBeacons(in: region)
     }
 
     

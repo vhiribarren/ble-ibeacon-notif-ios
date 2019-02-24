@@ -7,14 +7,28 @@
 //
 
 import UIKit
+import CoreLocation
+import UserNotifications
+
 
 class ViewController: UIViewController {
 
+    
+    private let locationManager = CLLocationManager()
+    private let notificationCenter = UNUserNotificationCenter.current()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        askAuthorizations()
     }
 
-
+    
+    func askAuthorizations() {
+        locationManager.requestAlwaysAuthorization()
+        notificationCenter.requestAuthorization(options: [.alert]) { (granted, error) in
+        }
+    }
+    
+    
 }
-

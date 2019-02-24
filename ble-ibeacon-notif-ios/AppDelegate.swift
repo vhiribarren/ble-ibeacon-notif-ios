@@ -6,6 +6,7 @@
 //  Copyright © 2019 Vincent Hiribarren. All rights reserved.
 //
 
+import os.log
 import UIKit
 import CoreLocation
 import UserNotifications
@@ -30,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func detectBeacon() {
-        print("start beacon detection")
+        os_log("Start beacon detection.", type: .info)
         let uuid = UUID(uuidString: "00112233-4455-6677-8899-aabbccddeeff")
         let major:CLBeaconMajorValue = 0
         let minor:CLBeaconMinorValue = 0
@@ -52,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: nil)
         notificationCenter.add(request) { (error) in
             if let error = error {
-                print(error.localizedDescription)
+                os_log("%{public}@", type: .error, error.localizedDescription)
             }
         }
     }
@@ -72,10 +73,12 @@ extension AppDelegate : UNUserNotificationCenterDelegate {
 extension AppDelegate : CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        os_log("iBeacon didEnterRegion.", type: .info)
         displayNotification(message: "enter")
     }
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        os_log("iBeacon didExitRegion.", type: .info)
         displayNotification(message: "exit")
     }
     
